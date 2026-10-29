@@ -92,17 +92,40 @@ def _to_float(value: str) -> float | None:
 
 
 def _fetch_quote(symbol: str) -> dict | None:
-    """Return today's OHLC quote for a symbol, or None on failure."""
-    try:
-        resp = requests.get(QUOTE_URL.format(symbol=symbol), headers=HEADERS, timeout=30)
-        resp.raise_for_status()
-    except requests.RequestException as exc:
-        print(f"  ! quote fetch failed for {symbol}: {exc}", file=sys.stderr)
-        return None
+    """Return today's OHLC quote for a symbol, or None on failure.
 
-    # DEBUG: show exactly what Stooq returned for this symbol.
-    print(f"  [debug] {symbol} raw quote -> {resp.text.strip()[:200]!r}")
-
+    DIAGNOSTIC MODE: tries several candidate symbol spellings and logs which
+    one Stooq accepts, so we can lock in the correct format.
+    """
+    candidates = [
+        symbol,                       # e.g. ^SPX
+        symbol.lstrip("^"),           # e.g. SPX  / SP500-10
+        symbol.lstrip("^").lower(),   # e.g. spx  / sp500-10
+        symbol.lstrip("^").replace("-", ".").lower(),  # e.g. sp500.10
+        symbol.lstrip("^").replace("SP500-", "^spx").lower(),
+    ]
+    tried = []
+    for cand in dict.fromkeys(candidates):  # dedupe, keep order
+        try:
+            resp = requests.get(QUOTE_URL.format(symbol=cand), headers=HEADERS, timeout=30)
+        except requests.RequestException as exc:
+            tried.append(f"{cand}=EXC")
+            continue
+        body = resp.text.strip()
+        ok = resp.status_code == 200 and "N/D" not in body and "Close" in body.split("\n")[0]
+        has_data = ok and len(body.split("\n")) > 1 and "N/D" not in body.split("\n")[1]
+        print(f"  [debug] try {cand!r}: status={resp.status_code} "
+              f"first_line={body.split(chr(10))[0][:60]!r} "
+              f"data_line={(body.split(chr(10))[1][:80] if len(body.split(chr(10)))>1 else '')!r}")
+        if has_data:
+            rows = list(csv.DictReader(io.StringIO(resp.text)))
+            if rows and rows[0].get("Close") not in (None, "", "N/D"):
+                print(f"  [debug] >>> WORKING symbol for {symbol} is {cand!r}")
+                return rows[0]
+        tried.append(cand)
+    print(f"  ! no working symbol for {symbol}; tried {tried}", file=sys.stderr)
+    return None
+    # (unreachable legacy parse kept for reference)
     rows = list(csv.DictReader(io.StringIO(resp.text)))
     if not rows:
         return None
