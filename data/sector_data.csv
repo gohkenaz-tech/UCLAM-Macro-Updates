@@ -1,0 +1,13 @@
+name,price,change,change_percent,open,day_low,day_high,week52_low,week52_high,url,scraped_at
+S&P 500 (Index),5745.37,8.34,0.15,5739.12,5730.50,5767.37,4953.56,5767.37,https://www.marketwatch.com/investing/index/spx,2026-10-29T00:00:00+00:00
+Energy,698.45,-2.10,-0.30,700.55,695.20,702.10,610.40,735.80,https://www.marketwatch.com/investing/index/sp500.10?countrycode=xx,2026-10-29T00:00:00+00:00
+Materials,596.30,1.80,0.30,594.50,591.83,598.20,471.83,616.97,https://www.marketwatch.com/investing/index/sp500.15?countrycode=xx,2026-10-29T00:00:00+00:00
+Industrials,1120.75,4.25,0.38,1116.50,1112.00,1125.30,890.10,1130.50,https://www.marketwatch.com/investing/index/sp500.20?countrycode=xx,2026-10-29T00:00:00+00:00
+Consumer Discretionary,1680.20,-6.40,-0.38,1686.60,1672.10,1690.00,1310.25,1705.90,https://www.marketwatch.com/investing/index/sp500.25?countrycode=xx,2026-10-29T00:00:00+00:00
+Consumer Staples,879.96,2.15,0.24,877.81,874.30,881.50,703.80,899.94,https://www.marketwatch.com/investing/index/sp500.30?countrycode=xx,2026-10-29T00:00:00+00:00
+Health Care,1645.30,-3.10,-0.19,1648.40,1640.00,1652.20,1420.75,1725.40,https://www.marketwatch.com/investing/index/sp500.35?countrycode=xx,2026-10-29T00:00:00+00:00
+Financials,820.55,3.40,0.42,817.15,814.60,823.00,640.30,828.10,https://www.marketwatch.com/investing/index/sp500.40?countrycode=xx,2026-10-29T00:00:00+00:00
+Information Technology,4512.80,22.15,0.49,4490.65,4475.20,4530.00,3310.40,4540.90,https://www.marketwatch.com/investing/index/sp500.45?countrycode=xx,2026-10-29T00:00:00+00:00
+Communication Services,382.40,0.95,0.25,381.45,379.80,383.60,285.10,388.20,https://www.marketwatch.com/investing/index/sp500.50?countrycode=xx,2026-10-29T00:00:00+00:00
+Utilities,415.60,-1.25,-0.30,416.85,413.90,418.00,330.50,425.70,https://www.marketwatch.com/investing/index/sp500.55?countrycode=xx,2026-10-29T00:00:00+00:00
+Real Estate,268.90,0.70,0.26,268.20,266.75,270.10,215.40,278.30,https://www.marketwatch.com/investing/index/sp500.60?countrycode=xx,2026-10-29T00:00:00+00:00

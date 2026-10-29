@@ -1,0 +1,43 @@
+name: Daily Data Refresh
+
+# When this runs:
+#  - On a schedule: every day at 06:00 UTC
+#  - Manually: via the "Run workflow" button in the Actions tab
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch: {}
+
+# Allow the workflow to commit the updated CSV back to the repo.
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run the scraper
+        run: python scraper.py
+
+      - name: Commit updated data (if it changed)
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/sector_data.csv
+          if git diff --staged --quiet; then
+            echo "No data changes to commit."
+          else
+            git commit -m "chore: daily data refresh [skip ci]"
+            git push
+          fi
