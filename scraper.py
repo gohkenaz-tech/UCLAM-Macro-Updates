@@ -100,6 +100,9 @@ def _fetch_quote(symbol: str) -> dict | None:
         print(f"  ! quote fetch failed for {symbol}: {exc}", file=sys.stderr)
         return None
 
+    # DEBUG: show exactly what Stooq returned for this symbol.
+    print(f"  [debug] {symbol} raw quote -> {resp.text.strip()[:200]!r}")
+
     rows = list(csv.DictReader(io.StringIO(resp.text)))
     if not rows:
         return None
